@@ -35,7 +35,7 @@ class cluster:
         self.parrent[parent_x] = parent_y  # Merge: make parent's parent_y
 
     def assign_label(self):
-        """Label clusters in the grid using a union-find approach."""
+        """Label clusters in the grid using a union-find approach"""
         for i in range(self.size):
             for j in range(self.size):
                 # Skip if the cell is not occupied
