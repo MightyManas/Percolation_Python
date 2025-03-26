@@ -1,0 +1,8 @@
+Number of clusters: 7
+Cluster 13: Size = 2
+Cluster 8: Size = 2
+Cluster 5: Size = 4
+Cluster 3: Size = 1
+Cluster 2: Size = 1
+Cluster 14: Size = 28
+Cluster 1: Size = 2
