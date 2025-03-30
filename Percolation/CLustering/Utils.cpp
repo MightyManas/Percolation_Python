@@ -10,7 +10,7 @@ vector<vector<int>> generate_rectangular_lattice(int rows, int cols, double p) {
             grid[i][j] = (rand() / (double)RAND_MAX < p) ? 1 : 0;
         }
     }
-    cout << grid;
+    //cout << grid;
     return grid;
 }
 
@@ -23,3 +23,4 @@ ostream& operator<<(ostream& os, const vector<vector<int>>& vec) {
     }
     return os;
 }
+
