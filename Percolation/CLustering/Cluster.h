@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include <omp.h>
 using namespace std;
 
 class Cluster {
