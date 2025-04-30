@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <ctime>
 #include "Utils.h"
+#include <queue>
 
 int Cluster::labels = 0;
 
@@ -64,6 +65,7 @@ void Cluster::assign_labels() {
                     union_sets(left, top);
                     
                 }
+                clusterSizes[grid[i][j]]++;
             }
             else {
                 grid[i][j] = max(left, top);
@@ -82,7 +84,7 @@ void Cluster::data_save(int k) {
         file << "Cluster " << label << ": Size = " << size << endl;
     }
     file.close();
-    get_grid(k); // save the grid to a file
+    //get_grid(k); // save the grid to a file
 
 }
 
@@ -96,13 +98,13 @@ int Cluster::vector_comparator(vector<int>& vector1, vector<int>& vector2) {
     for (size_t j = 0; j < vector2.size(); j++) {
         if (vector2[j] != 0 && set1.find(vector2[j]) != set1.end()) {
             cout << "Match Found: vector2[" << j << "] with value " << vector2[j] << endl;
-            return 1;
+            return vector2[j]; // Return the matching value
         }
     }
     return 0;
 }
 
-bool Cluster::percolates() {
+int Cluster::percolates() {
     return vector_comparator(grid[0], grid[grid.size() - 1]);
 }
 
@@ -211,11 +213,92 @@ double Cluster::fractal_dimension() {
     return fractal_dim;
 }
 
-void directed_percolates(int percolating_index) {
+
+std::vector<std::pair<int, int>> Cluster::connected_children(int x, int y) {
+    std::vector<std::pair<int, int>> result;
+    if (grid[x][y] == 0) return result;
+
+    int target_label = grid[x][y];
+    std::vector<std::vector<bool>> visited(grid.size(), std::vector<bool>(grid[0].size(), false));
+    std::queue<std::pair<int, int>> q;
+
+    q.emplace(x, y);
+    visited[x][y] = true;
+
+    while (!q.empty()) {
+        auto [cx, cy] = q.front();
+        q.pop();
+
+        // Check if this node is in the row below the original node
+        if (cx == x + 1) {
+            result.emplace_back(cx, cy);
+            // Do NOT continue exploring down from here — this is a "child"
+            continue;
+        }
+
+        // Explore 4-neighbor connectivity (you can generalize)
+        const std::vector<std::pair<int, int>> directions = {
+            {1, 0}, {-1, 0}, {0, 1}, {0, -1}
+        };
+
+        for (const auto& [dx, dy] : directions) {
+            int nx = cx + dx, ny = cy + dy;
+            if (nx >= 0 && nx < grid.size() && ny >= 0 && ny < grid[0].size()) {
+                if (!visited[nx][ny] && grid[nx][ny] == target_label) {
+                    visited[nx][ny] = true;
+                    q.emplace(nx, ny);
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+
+
+
+int Cluster::directed_percolates(int percolating_index) {
     // This function checks if the grid percolates for directed percolation.
-    // std::vector<std::vector<int>> grid_copy = grid ;
-    // std::unordered_set<std::unordered_set<int,int>> visited;
+
+    std::vector<std::pair<int,int>> parent_nodes ;
+    std::vector<std::pair<int,int>> direct_children ;
+    direct_children.push_back(std::make_pair(1,1));
+    size_t i = 0;
+    std::cout << "the directed apple is red" << std::endl;  
+    while(i < grid.size() && direct_children.size() != 0) {
+        std::cout << "the while apple has begun" << std::endl;
+        for (size_t j = 0; j < grid[i].size(); j++  ) {
+            //std::cout << "the for apple has begun" << std::endl;
+            if (grid[i][j] == 0) continue;
+            if (grid[i][j] == percolating_index) {
+                parent_nodes.push_back(std::make_pair(i,j));
+            } 
+        }
+        for (size_t k = 0; k < parent_nodes.size(); k++) {
+            //std::cout << "the parent apple is eating up" << std::endl;
+            int x = parent_nodes[k].first;
+            int y = parent_nodes[k].second;
+            if (x > 0 && grid[x-1][y-1] == percolating_index) {
+                direct_children.clear();
+                direct_children.push_back(std::make_pair(x-1,y-1));
+                std::vector<std::pair<int, int>> children = connected_children(x, y);
+                direct_children.insert(direct_children.end(), children.begin(), children.end());
+            }
+          
+    }
+        parent_nodes.clear();
+        parent_nodes = direct_children;
     
+        i++;
+    }
+    if (direct_children.size() != 0) {
+        std::cout << "The grid percolates in the direction of the children" << std::endl;
+        return 1; // return 1 if the grid percolates in the direction of the children
+    } else {
+        std::cout << "nope" << std::endl;
+        return 0; // return 0 if the grid does not percolate in the direction of the children
+    }
 
     
 }

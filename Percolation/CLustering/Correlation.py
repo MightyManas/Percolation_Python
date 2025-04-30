@@ -20,7 +20,7 @@ for i in range(1,20):
     data = pd.read_csv(f"correlation_length_{prob:.6f}.txt", sep = ' ', header= None)
     x = data[0].values
     z = np.array(data[1].values)
-    gt(f,xdata = x,ydata = z,p0 = [6], dy = 0.001, dx = 0.01, title = 'correlation function', xlabel = 'distance between two points', ylabel = 'correlation function')
+    gt(f,xdata = x,ydata = z,p0 = [1,6], dy = 0.001, dx = 0.01, title = 'correlation function', xlabel = 'distance between two points', ylabel = 'correlation function')
 
     output_array = np.append(output_array,(z))
 
@@ -33,7 +33,7 @@ x, y = np.meshgrid(x, y)
 #print(output_array.shape, output_array)
 
 # Evaluate the function
-output_array = output_array.reshape(19,1414)
+output_array = output_array.reshape(19,140)
 z = output_array
 
 # Plotting
