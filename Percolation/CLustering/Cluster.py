@@ -5,7 +5,7 @@ from graphing import graphing_tool as gt
 def exponential_decay(x, a, b, xi):
     """Safe evaluation with numerical guards"""
     with np.errstate(all='ignore'):
-        return a + x*(-b) + (-np.exp(x)/xi)
+        return a + x*(-b) - (np.exp(x)/xi)
 
 def parse_cluster_file(filepath):
     """Bulletproof parser for your exact file format"""
@@ -76,7 +76,9 @@ if __name__ == "__main__":
     print("Files in directory:", os.listdir())
     
     cluster_sizes = parse_cluster_file(INPUT_FILE)
-    
+    # Filter cluster sizes: 10 <= size <= 5000
+    cluster_sizes = cluster_sizes[(cluster_sizes >= 20 ) & (cluster_sizes <= np.exp(7.5))]
+
     if cluster_sizes is not None:
         print(f"Analyzing {len(cluster_sizes)} clusters")
         print("Size stats - Min:", np.min(cluster_sizes), 
