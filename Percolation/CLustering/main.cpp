@@ -8,7 +8,7 @@ std::vector<double>  prob_interation() {
     // This function generates a random number of iterations based on the given probabilities.
     double p ;
     std::vector<double> m;
-    for (p = 0.585; p < 0.597; p += 0.001) {
+    for (p = 0.587; p < 0.603; p += 0.001) {
         m.push_back(p);      
     }
     return m;
@@ -35,7 +35,7 @@ int main() {
     for (size_t i = 0; i < m.size(); i++) {
         // for (int j = 0; j < iteratrions; j++) {
             Cluster rect_cluster = Cluster::init_clustering(k1, k2,m[i] );
-            rect_cluster.data_save(i); // save the grid and cluster size distribution to two separate txt files
+            rect_cluster.data_save(i+11); // save the grid and cluster size distribution to two separate txt files
         //     int percolating_index = rect_cluster.percolates();
         //     std::cout << "Percolation index: " << percolating_index << std::endl;
 

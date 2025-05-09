@@ -77,7 +77,7 @@ if __name__ == "__main__":
     
     cluster_sizes = parse_cluster_file(INPUT_FILE)
     # Filter cluster sizes: 10 <= size <= 5000
-    cluster_sizes = cluster_sizes[(cluster_sizes >= 20 ) & (cluster_sizes <= np.exp(7.5))]
+    cluster_sizes = cluster_sizes[(cluster_sizes >= 5 ) & (cluster_sizes <= np.exp(7.5))]
 
     if cluster_sizes is not None:
         print(f"Analyzing {len(cluster_sizes)} clusters")
